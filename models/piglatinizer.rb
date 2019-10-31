@@ -1,18 +1,25 @@
 class PigLatinizer
+	attr_accessor :text
 
-  def to_pig_latin(phrase)
-    words = phrase.split(" ")
-    words.collect { |w| piglatinize(w) }.join(" ")
-  end
+	VOWELS = ["a", "e", "i", "o", "u"]
 
-  def piglatinize(word)
-    parts_of_word = word.split(/([^aeiouAEIOU]*)([aeiouAEIOU]*)(.*)/)
-    start = parts_of_word[1]
-    rest = parts_of_word[2] + (parts_of_word[3] || "")
-    if start.length > 0
-      "#{rest}#{start}ay"
-    else
-      "#{rest}way"
-    end
-  end
+	def to_pig_latin(text)
+		self.text = text.split.map { |word| piglatinize(word) }.join(" ")
+	end
+
+	def piglatinize(word)
+		normal_word = word.split(//)
+		while !(VOWELS.include?(normal_word.first.downcase))
+			normal_word << normal_word.shift
+		end
+
+		if VOWELS.include?(word[0].downcase)
+			normal_word << "way"
+		else
+			normal_word << "ay"
+		end
+
+		normal_word.join("")
+	end
+
 end
